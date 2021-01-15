@@ -1,0 +1,32 @@
+{
+    "name": "repoNav",
+    "version": "1.0",
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+            "js": [
+                "content.js"
+            ],
+            "css": [
+                "repo/tree.css"
+            ],
+            "matches": [
+                "https://www.github.com/*",
+                "https://github.com/*"
+
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        "main.js",
+        "repo/files_mapper.js",
+        "repo/tabs.js",
+        "repo/tree.js",
+        "repo/tree.css"
+    ],
+    "permissions": [
+        "tabs",
+        "https://www.github.com/*",
+        "https://github.com/*"
+    ]
+}

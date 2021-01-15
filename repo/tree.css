@@ -1,0 +1,183 @@
+/*********************************************************/
+/* Styles for the scroll bar*/ 
+/*********************************************************/
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/*********************************************************/
+/* Styles for the side nav*/ 
+/*********************************************************/
+
+.loader {
+  border: 5px solid #f3f3f3; /* Light grey */
+  border-top: 5px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  animation: spin 1.25s linear infinite;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.loader_invisible {
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* The side navigation menu */
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 245px; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #191B28;
+  overflow-x: scroll;
+  padding-top: 60px; /* Place content 60px from the top */
+  padding-left: 20px;
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  border-right: 5px solid #14141466; 
+  color: #c6c6c6;
+  
+  scrollbar-width: thin !important;
+  scrollbar-color:  #828bb830 #191b28 !important;
+}
+
+
+.slide {
+  margin-left: 234px;
+  /* transition: margin-left .5s; */
+}
+
+
+/* Remove default bullets */
+ul, #repoTreeRoot {
+    list-style-type: none;
+    display: inline-block;
+  }
+  
+  /* Remove margins and padding from the parent ul */
+  #repoTreeRoot {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+  }
+  
+  /* Style the caret/arrow */
+  .caret {
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+  }
+  
+  /* Create the caret/arrow with a unicode, and style it */
+  .caret::before {
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+  }
+  
+  /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+  .caret-down::before {
+    transform: rotate(90deg);
+  }
+  
+  /* Hide the nested list */
+  .nested {
+    display: none;
+  }
+  
+  /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+  .active {
+    display: block;
+    padding-inline-start: 40px;
+  }
+
+  .file {
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    padding-left: 4px !important;
+    font-family:monospace;
+    font-size: 100%;
+  }
+
+  .active_file {
+    background-color: #333;
+  }
+
+  li.file:hover {
+    color: grey;
+  }
+
+  span.caret:hover {
+    color: grey;
+  }
+
+  /***************************************************************************/
+  /*                           TABS STYLES                                   */
+  /***************************************************************************/
+
+  /* Add a black background color to the top navigation */
+.topnav {
+  background-color: #191B28;
+  font-family:monospace;
+  font-size: 100%;
+  overflow: hidden;
+  padding-left: 32px;
+  user-select: none;
+}
+
+.tab {
+  cursor: pointer;
+  border-left: 1px solid #fcb901; 
+  float: left;
+  padding: 4px 6px;
+  text-decoration: none;
+  /* font-size: 17px; */
+  color: #f2f2f2;
+  text-align: center;
+}
+
+.active_tab {
+  background-color: #333;
+  border-left: 5px solid #4CAF50; 
+}
+
+
+/* Change the color of links on hover */
+.topnav div:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
