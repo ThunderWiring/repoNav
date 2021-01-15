@@ -12,3 +12,5 @@ A chrom extension that makes it easy to navigate a repository
     on the correct branch, after user manually chaned the branch
 
 ## Demo
+Looks amazing with Github's dark mode!
+![title](demo/screen1.PNG)
