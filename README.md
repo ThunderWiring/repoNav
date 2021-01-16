@@ -10,12 +10,12 @@ A chrom extension that makes it easy to navigate a repository
 ## Manual Install
 Currently this extention is not in the Chrom Web Store, but you can install it 
 manually like so:
-* download the code (unzipp it)
-* visit chrome://extensions/
-  *  Make sure to toggle 'Developer mode' in the top right corner
-  *  Click 'Load unpacked' and chose the code downloaded earlier
-* Open a Github repo, reload it.
-* Enjoy :)
+1. download the code (unzipp it)
+2. visit chrome://extensions/
+2.1 Make sure to toggle 'Developer mode' in the top right corner
+2.2 Click 'Load unpacked' and chose the code downloaded in step 1
+3. Open any (Github repo)[https://github.com/ThunderWiring/repoNav] and reload it.
+4. Enjoy :)
 
 ## Demo
 Looks amazing with Github's dark mode!
