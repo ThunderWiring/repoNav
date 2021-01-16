@@ -31,7 +31,11 @@ const _getProjectNavigator = (url, filesTree) => {
         return null
     }
 
-    const sideNav = document.createElement('nav')
+    let sideNav = document.getElementById(EXT_ID)
+    if (sideNav != null && sideNav.parentElement != null) {
+        sideNav.parentElement.removeChild(sideNav)
+    }
+    sideNav = document.createElement('nav')
     sideNav.id = EXT_ID
     sideNav.classList.add('sidenav')
     sideNav.appendChild(_getLoader())
@@ -53,8 +57,15 @@ const _loadExtention = (body, url) => {
  *                  Execution starts here
 ***************************************************************************/
 
+let url = window.location.href
+
 window.addEventListener('message', (msg) => {
-    _loadExtention(bodyCollection[0], msg.data.url)
+    const newUrl = msg.data.url
+    if (newUrl === url) {
+        return
+    }
+    _loadExtention(bodyCollection[0], newUrl)
+    url = newUrl
 });
 
 const bodyCollection = document.getElementsByTagName('body')
@@ -62,5 +73,5 @@ const bodyCollection = document.getElementsByTagName('body')
 if (bodyCollection.legth == 0) {
     console.warn('current host has no repo to navigate')
 } else {
-    _loadExtention(bodyCollection[0], window.location.href)
+    _loadExtention(bodyCollection[0], url)
 }

@@ -17,6 +17,9 @@ treeRoot.id = TREE_ID
 
 const _toggleLoader = (shouldToggle) => {
     const loader = document.getElementById('repoTreeLoader')
+    if (loader == null) {
+        return
+    }
     const isLoading = !loader.classList.contains('loader_invisible')
 
     if ((shouldToggle ^ isLoading) === 1) {
@@ -244,12 +247,7 @@ const _toggleActiveRout = (url) => {
             const pathSegs = pathSegmentation[0].split('/')
             const nameFromPath = pathSegs[pathSegs.length - 1]
             if (fileName === nameFromPath) {
-                _updateActiveFile(child)
-                makeTabActive({
-                    id: `tab_id_${child.id}`,
-                    fileName: fileName,
-                    fileUrl: child.getAttribute('html_url'),
-                })
+                loadFile(child.getAttribute('html_url'), fileName, child.id)
                 break
             }
         }
