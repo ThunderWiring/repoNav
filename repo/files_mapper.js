@@ -6,6 +6,7 @@ const repoBranches = [] /* caches the branches */
 let currentBranch = ''
 let currentUser = ''
 let currentRepo = ''
+let topLevelFiles = []
 
 const isIterable = (value) => Symbol.iterator in Object(value)
 
@@ -71,26 +72,33 @@ const _getRepo = (url) => {
 }
 
 const getTopLevelFiles = async (url) => {
-    return _getContentURL(url, '')
-        .then((rootContnet) => {
-            console.log('getTopLevelFiles - rootContnet', rootContnet)
-            if (rootContnet == null) {
-                return null
-            }
-            return fetch(rootContnet, { method: 'get' })
-                .then(res => res.json())
-                .then(resp1 => isIterable(resp1) ? resp1 : [resp1])
-                .catch(err => {
-                    console.error('failed to get files for path', dirPath,
-                        '\nerror - ', err)
-                    return []
-                })
-        })
+    return _didRepoChanged(url).then(didChange => {
+        if (!didChange) {
+            return ({ didChange: false, files: topLevelFiles })
+        }
+        return _getContentURL(url, '')
+            .then((rootContnet) => {
+                if (rootContnet == null) {
+                    return ({ didChange: false, files: null })
+                }
+                return fetch(rootContnet, { method: 'get' })
+                    .then(res => res.json())
+                    .then(resp1 => {
+                        topLevelFiles = isIterable(resp1) ? resp1 : [resp1]
+                        return ({ didChange: true, files: topLevelFiles })
+                    })
+                    .catch(err => {
+                        console.error(
+                            'failed to get files for path', dirPath,
+                            '\nerror - ', err)
+                        return ({ didChange: true, files: [] })
+                    })
+            })
+    })
 }
 
 const getDirFiles = (url, dirPath) => {
     return _getContentURL(url, dirPath).then((contentPath) => {
-        console.log('getDirFiles - contentPath', contentPath)
         if (contentPath == null) {
             return null
         }
@@ -100,18 +108,17 @@ const getDirFiles = (url, dirPath) => {
                 return isIterable(res) ? res : [res]
             })
             .catch(e => {
-                console.error('getDirFiles - failed to get files for path', dirPath)
-                console.error('getDirFiles - err', e)
+                console.error('failed to get files for path', dirPath, e)
                 return []
             })
     })
 }
 
-const didRepoChanged = (url) => {
+const _didRepoChanged = (url) => {
     return _getBranch(url).then(branch => {
         const { user, repo } = _getRepo(url)
         return currentBranch !== branch || currentRepo !== repo || currentUser !== user
     })
 }
 
-export { getTopLevelFiles, getDirFiles, didRepoChanged }
+export { getTopLevelFiles, getDirFiles }

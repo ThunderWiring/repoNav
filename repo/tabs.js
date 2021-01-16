@@ -46,7 +46,7 @@ const _closeTab = (tabId) => {
     tabsMenuRoot.removeChild(tab)
 
 
-    if (tabId === activeTab.getAttribute('tabId')) {
+    if (openTabsIds.length > 0 && tabId === activeTab.getAttribute('tabId')) {
         const nextEleInd = indToRemove === 0 ? indToRemove : indToRemove - 1
         const newActiveId = openTabsIds[nextEleInd % openTabsIds.length]
         activeTab = document.getElementById(newActiveId)

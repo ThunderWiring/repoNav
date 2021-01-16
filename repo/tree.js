@@ -221,7 +221,7 @@ const _createDir = (dirObj) => {
     })
 }
 
-const _toggleActiveRout = (url) => {
+const toggleActiveRout = (url) => {
     let activeRoute = url.split('github.com/')[1].split('/')
     let startInd = 0
 
@@ -255,7 +255,12 @@ const _toggleActiveRout = (url) => {
     }
 
     const fullPath = pathSegmentation[1]
-    activeRoute = fullPath.split('/')
+    let pivot = 0
+    activeRoute = fullPath.split('/').map((name, ind) => {
+        const sub = fullPath.substring(0, name.length + fullPath.indexOf(name, pivot))
+        pivot = sub.length
+        return sub
+    })
 
     for (let i = 0; i < activeRoute.length - 1; i++) {
         const dir = dir_html_to_obj_map[activeRoute[i]]
@@ -273,7 +278,10 @@ const _toggleActiveRout = (url) => {
                 _clickDir(toggle)
             })
         } else {
-            _clickDir(dir.ext_html_ele.getElementsByClassName('caret')[0])
+            const toToggle = dir.ext_html_ele.getElementsByClassName('caret')[0]
+            if (!toToggle.classList.contains("caret-down")) {
+                _clickDir(toToggle)
+            }
         }
     }
 }
@@ -316,7 +324,7 @@ const getTree = (url, filesTree) => {
         treeRoot.appendChild(appendToTree[i].ext_html_ele)
     }
 
-    _toggleActiveRout(url)
+    toggleActiveRout(url)
 
     return treeRoot
 }
@@ -332,4 +340,4 @@ const clearTree = () => {
     fetched_dirs = []
 }
 
-export { TREE_ID, getTree, loadFile, clearTree }
+export { TREE_ID, getTree, loadFile, clearTree, toggleActiveRout }
