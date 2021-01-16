@@ -1,5 +1,5 @@
 import { getTopLevelFiles } from './repo/files_mapper.js'
-import { getTree } from './repo/tree.js'
+import { getTree, clearTree } from './repo/tree.js'
 
 const EXT_ID = 'E45rt66t'
 
@@ -30,7 +30,7 @@ const _getProjectNavigator = (url, filesTree) => {
     if (tree == null) {
         return null
     }
-    
+
     const sideNav = document.createElement('nav')
     sideNav.id = EXT_ID
     sideNav.classList.add('sidenav')
@@ -40,19 +40,27 @@ const _getProjectNavigator = (url, filesTree) => {
     return sideNav
 }
 
+const _loadExtention = (body, url) => {
+    getTopLevelFiles(url).then(res => {
+        if (res != null && res.length > 0) {
+            clearTree()
+            _addRepoNavigator(url, body, res)
+        }
+    })
+}
+
 /**************************************************************************
  *                  Execution starts here
 ***************************************************************************/
 
-const url = window.location.href
+window.addEventListener('message', (msg) => {
+    _loadExtention(bodyCollection[0], msg.data.url)
+});
+
 const bodyCollection = document.getElementsByTagName('body')
 
 if (bodyCollection.legth == 0) {
     console.warn('current host has no repo to navigate')
 } else {
-    getTopLevelFiles(url).then(res => {
-        if (res != null && res.length > 0) {
-        _addRepoNavigator(url, bodyCollection[0], res)
-        }
-    })
+    _loadExtention(bodyCollection[0], window.location.href)
 }

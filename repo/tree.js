@@ -7,9 +7,9 @@ import { makeTabActive } from './tabs.js'
 
 const TREE_ID = 'repoTreeRoot'
 const REPO_PJAX_CONTAINER_ID = 'js-repo-pjax-container'
-const dir_map = {"" : []} // maps the path to the dir object
-const dir_html_to_obj_map = []
-const fetched_dirs = [] // contains the sha1 of the dirs that their content has been fetched
+let dir_map = {"" : []} // maps the path to the dir object
+let dir_html_to_obj_map = []
+let fetched_dirs = [] // contains the sha1 of the dirs that their content has been fetched
 const treeRoot = document.createElement('ul')
 let activeFile = null;
 
@@ -87,8 +87,8 @@ const _createFile = (fileObj) => {
     })
 }
 
-const _getSubDirFiles = async (dirPath) => {
-    return getDirFiles(dirPath)
+const _getSubDirFiles = async (url, dirPath) => {
+    return getDirFiles(url, dirPath)
         .then(dirContent => {
             let objToAdd
             return dirContent.map(fileOrDir => {
@@ -148,7 +148,7 @@ const _clickDir = (clicked) => {
         return
     }
     const url = window.location.href
-    _getSubDirFiles(dirObj.path)
+    _getSubDirFiles(dirObj.html_url, dirObj.path)
         .then(itemsToAdd => {
             // create dir
             const dirs = itemsToAdd
@@ -238,7 +238,21 @@ const _toggleActiveRout = (url) => {
     const pathSegmentation =
         url.split('github.com/')[1].split(`${activeRoute[startInd - 1]}/`)
     if (pathSegmentation.length <= 1) {
-        // active file is at top level tree, do nothing..
+        for (let i = 0; i < treeRoot.children.length; i++) {
+            const child = treeRoot.children[i]
+            const fileName = child.getAttribute('filename')
+            const pathSegs = pathSegmentation[0].split('/')
+            const nameFromPath = pathSegs[pathSegs.length - 1]
+            if (fileName === nameFromPath) {
+                _updateActiveFile(child)
+                makeTabActive({
+                    id: `tab_id_${child.id}`,
+                    fileName: fileName,
+                    fileUrl: child.getAttribute('html_url'),
+                })
+                break
+            }
+        }
         return
     }
 
@@ -253,7 +267,7 @@ const _toggleActiveRout = (url) => {
                 basePath.length == 0
                     ? activeRoute[i] : `${basePath}${activeRoute[i]}`
 
-            _getSubDirFiles(path).then(_dirObjs => {
+            _getSubDirFiles(url, path).then(_dirObjs => {
                 const toggle =
                     dir_html_to_obj_map[path]
                         .ext_html_ele
@@ -309,4 +323,15 @@ const getTree = (url, filesTree) => {
     return treeRoot
 }
 
-export { TREE_ID, getTree, loadFile }
+const clearTree = () => {
+    // clear tree root
+    while(treeRoot.children.length > 0) {
+        treeRoot.removeChild(treeRoot.children[0])
+    }
+    activeFile = null
+    dir_map = {"" : []}
+    dir_html_to_obj_map = []
+    fetched_dirs = []
+}
+
+export { TREE_ID, getTree, loadFile, clearTree }
