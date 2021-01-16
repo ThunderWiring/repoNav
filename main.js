@@ -1,4 +1,4 @@
-import { getTopLevelFiles } from './repo/files_mapper.js'
+import { getTopLevelFiles, didRepoChanged } from './repo/files_mapper.js'
 import { getTree, clearTree } from './repo/tree.js'
 
 const EXT_ID = 'E45rt66t'
@@ -45,11 +45,13 @@ const _getProjectNavigator = (url, filesTree) => {
 }
 
 const _loadExtention = (body, url) => {
-    getTopLevelFiles(url).then(res => {
-        if (res != null && res.length > 0) {
-            clearTree()
-            _addRepoNavigator(url, body, res)
-        }
+    didRepoChanged(url).then(didChanged => {
+        didChanged && getTopLevelFiles(url).then(res => {
+            if (res != null && res.length > 0) {
+                clearTree()
+                _addRepoNavigator(url, body, res)
+            }
+        })
     })
 }
 
